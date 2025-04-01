@@ -22,8 +22,17 @@ export default {
     const client = new MongoClient(env.MONGODB_URI);
 
     try {
+      const events = ["commandStarted","commandSucceeded","serverDescriptionChanged","serverHeartbeatFailed","serverOpening","serverClosed","topologyOpening",
+        "topologyClosed","topologyDescriptionChanged","connectionCheckOutStarted","connectionCheckedIn","connectionPoolCleared",
+        "connectionClosed","connectionPoolClosed"];
 
-			const headers = request.headers
+      var messages = [];
+      for(const e in events) {
+        client.on(e, (event) => {
+          messages.push(`${Date.now()} | ${e}) - ${JSON.stringify(event)}`);
+        });
+      }
+
       const queryStartTime = Date.now();
 
 			await client.connect();
@@ -41,7 +50,7 @@ export default {
       }
 
       return Response.json({
-				headers,
+				messages,
         movie,
 				queryTime
 			});
