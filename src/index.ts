@@ -20,19 +20,17 @@ interface Env {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const client = new MongoClient(env.MONGODB_URI);
+    const events = ["commandStarted","commandSucceeded","serverDescriptionChanged","serverHeartbeatFailed","serverOpening","serverClosed","topologyOpening",
+      "topologyClosed","topologyDescriptionChanged","connectionCheckOutStarted","connectionCheckedIn","connectionPoolCleared",
+      "connectionClosed","connectionPoolClosed"];
+    const messages: string[] = [];
+    for(const e in events) {
+      client.on(e, (event) => {
+        messages.push(`${Date.now()} | ${e} - ${JSON.stringify(event)}`);
+      });
+    }
 
     try {
-      const events = ["commandStarted","commandSucceeded","serverDescriptionChanged","serverHeartbeatFailed","serverOpening","serverClosed","topologyOpening",
-        "topologyClosed","topologyDescriptionChanged","connectionCheckOutStarted","connectionCheckedIn","connectionPoolCleared",
-        "connectionClosed","connectionPoolClosed"];
-
-      var messages = [];
-      for(const e in events) {
-        client.on(e, (event) => {
-          messages.push(`${Date.now()} | ${e}) - ${JSON.stringify(event)}`);
-        });
-      }
-
       const queryStartTime = Date.now();
 
 			await client.connect();
