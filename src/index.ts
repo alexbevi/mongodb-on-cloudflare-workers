@@ -24,9 +24,9 @@ export default {
       "topologyClosed","topologyDescriptionChanged","connectionCheckOutStarted","connectionCheckedIn","connectionPoolCleared",
       "connectionClosed","connectionPoolClosed"];
     const messages: string[] = [];
-    for(const e in events) {
-      client.on(e, (event) => {
-        messages.push(`${Date.now()} | ${e} - ${JSON.stringify(event)}`);
+    for(var i = 0; i < events.length; i++) {
+      client.on(events[i], (event) => {
+        messages.push(`${Date.now()} | ${events[i]} - ${JSON.stringify(event)}`);
       });
     }
 
