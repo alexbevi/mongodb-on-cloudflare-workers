@@ -22,17 +22,18 @@ export default {
     const client = new MongoClient(env.MONGODB_URI);
 
     try {
-      
-			const queryStartTime = Date.now();
+
+			const headers = request.headers
+      const queryStartTime = Date.now();
 
 			await client.connect();
-      
+
       const db = client.db("sample_mflix");
       const movies = db.collection("movies");
-      
+
       // Find the movie
       const movie = await movies.findOne({ title: 'Back to the Future' });
-      
+
 			const queryTime = Date.now() - queryStartTime;
 
       if (!movie) {
@@ -40,7 +41,8 @@ export default {
       }
 
       return Response.json({
-				movie,
+				headers,
+        movie,
 				queryTime
 			});
 
