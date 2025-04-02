@@ -4,7 +4,7 @@ interface Env {
   MONGODB_URI: string;
 }
 
-export class MongoDBDConnector {
+export class MongoDBConnector {
   private env: Env;
   private client: MongoClient;
 

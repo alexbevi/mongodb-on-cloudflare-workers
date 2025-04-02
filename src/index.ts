@@ -23,5 +23,3 @@ export default {
     }
   }
 } satisfies ExportedHandler<Env>;
-
-export { MongoDBConnector };
