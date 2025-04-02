@@ -1,8 +1,9 @@
 import { MongoDBConnector } from './MongoDBConnector';
-// import { MongoDBDurableConnector } from './MongoDBDurableConnector';
+import { MongoDBDurableConnector } from './MongoDBDurableConnector';
+
 interface Env {
   MONGODB_URI: string;
-  // MY_DURABLE_OBJECT: DurableObjectNamespace<MongoDBConnector>;
+  MY_DURABLE_OBJECT: DurableObjectNamespace<MongoDBDurableConnector>;
 }
 
 export default {
@@ -10,10 +11,15 @@ export default {
     const { searchParams } = new URL(request.url)
     let durable = searchParams.get('durable')
     try {
-      // const id = env.MY_DURABLE_OBJECT.idFromName("mongodb-connector");
-      // const stub = env.MY_DURABLE_OBJECT.get(id);
+      let proxy = null;
 
-      const proxy = new MongoDBConnector(env)
+      if (durable === 'true') {
+        const id = env.MY_DURABLE_OBJECT.idFromName("mongodb-connector");
+        proxy = env.MY_DURABLE_OBJECT.get(id);
+      } else {
+        proxy = new MongoDBConnector(env);
+      }
+
       const result = await proxy.getMovie();
       return Response.json(result);
     } catch (error) {
