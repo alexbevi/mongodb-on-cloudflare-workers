@@ -29,3 +29,5 @@ export default {
     }
   }
 } satisfies ExportedHandler<Env>;
+
+export { MongoDBDurableConnector }; // need to export durable object from entrypoint
