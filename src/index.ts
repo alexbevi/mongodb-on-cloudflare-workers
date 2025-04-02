@@ -1,4 +1,4 @@
-// import { MongoDBConnector } from './MongoDBConnector';
+import { MongoDBConnector } from './MongoDBConnector';
 import { MongoDBDurableConnector } from './MongoDBDurableConnector';
 
 interface Env {
@@ -8,10 +8,17 @@ interface Env {
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const { searchParams } = new URL(request.url)
+    let durable = searchParams.get('durable')
     try {
-      const id = env.MY_DURABLE_OBJECT.idFromName("mongodb-connector");
-      const proxy = env.MY_DURABLE_OBJECT.get(id);
-      // proxy = new MongoDBConnector(env);
+      let proxy = null;
+
+      if (durable === 'true') {
+        const id = env.MY_DURABLE_OBJECT.idFromName("mongodb-connector");
+        proxy = env.MY_DURABLE_OBJECT.get(id);
+      } else {
+        proxy = new MongoDBConnector(env);
+      }
 
       const result = await proxy.getMovie();
       return Response.json(result);
@@ -22,5 +29,3 @@ export default {
     }
   }
 } satisfies ExportedHandler<Env>;
-
-export { MongoDBDurableConnector };

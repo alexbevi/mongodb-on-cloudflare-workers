@@ -1,4 +1,4 @@
-import { DurableObject } from "cloudflare:workers";
+import { DurableObject, DurableObjectState } from "cloudflare:workers";
 import { MongoClient } from 'mongodb';
 
 interface Env {
