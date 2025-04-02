@@ -29,3 +29,5 @@ export default {
     }
   }
 } satisfies ExportedHandler<Env>;
+
+export { MongoDBDurableConnector}
