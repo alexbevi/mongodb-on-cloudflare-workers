@@ -32,7 +32,9 @@ export class MongoDBDurableConnector extends DurableObject {
       const queryTime = Date.now() - queryStartTime;
       return {
         movie: {
-          ...movie
+          ...movie,
+          // Fixes "Error: Could not serialize object of type "_ObjectId". This type does not support serialization.""
+          _id: movie._id.toString()
         },
         queryTime
       };
