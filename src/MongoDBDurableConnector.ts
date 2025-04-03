@@ -25,16 +25,14 @@ export class MongoDBDurableConnector extends DurableObject {
       const query = { title: "The Room" };
       const options = {
         sort: { "imdb.rating": -1 },
-        projection: { title: 1, imdb: 1 },
+        projection: { _id: 0, title: 1, imdb: 1 },
       };
       const movie = await movies.findOne(query, options);
 
       const queryTime = Date.now() - queryStartTime;
       return {
         movie: {
-          ...movie,
-          // Fixes "Error: Could not serialize object of type "_ObjectId". This type does not support serialization.""
-          _id: movie._id.toString()
+          ...movie
         },
         queryTime
       };

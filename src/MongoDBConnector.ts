@@ -23,7 +23,7 @@ export class MongoDBConnector {
       const query = { title: "The Room" };
       const options = {
         sort: { "imdb.rating": -1 },
-        projection: { title: 1, imdb: 1 },
+        projection: { _id: 0, title: 1, imdb: 1 },
       };
       const movie = await movies.findOne(query, options);
 
